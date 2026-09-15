@@ -1,0 +1,103 @@
+.dynamic-table-wrapper {
+  width: 100%;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.05);
+
+  overflow: hidden;
+}
+
+.dynamic-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.dynamic-table {
+  width: 100%;
+  min-width: 600px;
+
+  border-collapse: collapse;
+
+  color: #111827;
+  font-size: 14px;
+}
+
+/* Header */
+
+.dynamic-table thead {
+  background: #f9fafb;
+}
+
+.dynamic-table th {
+  padding: 14px 18px;
+
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  white-space: nowrap;
+}
+
+/* Cells */
+
+.dynamic-table td {
+  padding: 15px 18px;
+
+  color: #374151;
+  line-height: 1.5;
+
+  border-bottom: 1px solid #f0f1f3;
+
+  white-space: nowrap;
+}
+
+/* Rows */
+
+.dynamic-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.dynamic-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.dynamic-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Первый столбец немного выделяем */
+
+.dynamic-table tbody td:first-child {
+  color: #111827;
+  font-weight: 500;
+}
+
+/* Если таблица пустая */
+
+.dynamic-table tbody:empty::after {
+  content: 'Нет данных';
+}
+
+/* Mobile */
+
+@media (max-width: 640px) {
+  .dynamic-table-wrapper {
+    border-radius: 12px;
+  }
+
+  .dynamic-table th,
+  .dynamic-table td {
+    padding: 12px 14px;
+  }
+}
