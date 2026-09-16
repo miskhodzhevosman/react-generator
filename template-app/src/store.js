@@ -11,21 +11,29 @@ export const createCrudStore = (api) =>
 
     // пагинация
     page: 1,
-    pageSize: 20,
+    pageSize: 10,
     count: 0,
 
+    q: '',
+
+    
     getAll: async (params = {}) => {
-      const { page = get().page, ...rest } = params
+      const {
+        page = get().page,
+        q = get().q,
+        ...rest
+      } = params
 
       set({ loading: true, error: null })
 
       try {
-        const { data } = await api.getAll({ page, ...rest })
+        const { data } = await api.getAll({ page, q, ...rest })
 
         set({
           items: data.results ?? data,
           count: data.count ?? data.length,
           page,
+          q,
           loading: false,
           loaded: true,
         })
@@ -37,21 +45,21 @@ export const createCrudStore = (api) =>
       }
     },
 
-    // принудительный рефетч (для смены страницы / поиска)
     reload: async (params = {}) => {
       set({ loaded: false })
       return get().getAll(params)
     },
 
-    // ... getOne, create, update, remove — без изменений
+    // смена страницы
+    setPage: (page) => get().reload({ page }),
+
+    // поиск с сбросом на 1-ю страницу
+    setQuery: (q) => get().reload({ q, page: 1 }),
 
     reset: () =>
       set({
-        items: [],
-        item: null,
-        loaded: false,
-        error: null,
-        page: 1,
-        count: 0,
+        items: [], item: null,
+        loaded: false, error: null,
+        page: 1, count: 0, q: '',
       }),
   }))
