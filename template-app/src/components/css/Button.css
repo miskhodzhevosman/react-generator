@@ -1,0 +1,49 @@
+.btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:focus-visible {
+  outline: 2px solid #4dabf7;
+  outline-offset: 2px;
+}
+
+/* Варианты */
+.btn--default {
+  background-color: #f1f3f5;
+  color: #495057;
+}
+.btn--default:hover { background-color: #e9ecef; }
+
+.btn--primary {
+  background-color: #1971c2;
+  color: #ffffff;
+}
+.btn--primary:hover { background-color: #1864ab; }
+
+.btn--edit {
+  background-color: #e7f5ff;
+  color: #1971c2;
+}
+.btn--edit:hover { background-color: #d0ebff; }
+
+.btn--delete {
+  background-color: #fff5f5;
+  color: #c92a2a;
+}
+.btn--delete:hover { background-color: #ffe3e3; }
+
+@media (max-width: 600px) {
+  .btn { width: 100%; padding: 8px 10px; }
+}

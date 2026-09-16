@@ -1,3 +1,5 @@
+import './css/Pagination.css'
+
 function Pagination({ page, pageSize, total, onChange }) {
   const pages = Math.ceil(total / pageSize) || 1
   if (pages <= 1) return null

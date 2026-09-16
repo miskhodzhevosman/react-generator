@@ -1,4 +1,6 @@
 // components/SearchInput.jsx
+import './css/SearchInput.css'
+
 import { useEffect, useState } from 'react'
 
 function SearchInput({ value, onChange, placeholder = 'Поиск...', delay = 400, minLength = 3 }) {

@@ -33,17 +33,18 @@ const fieldComponents = {
 function DynamicForm({
   schema,
   data = {},
+  initialValues: initialValuesProp = {},
   onSubmit,
   title = 'Заполните форму',
   description = 'Введите необходимые данные и отправьте форму.',
 }) {
-  const initialValues = {}
-
-  schema.forEach((field) => {
-    initialValues[field.name] = ''
+  const [values, setValues] = useState(() => {
+    const v = {}
+    schema.forEach((field) => {
+      v[field.name] = initialValuesProp[field.name] ?? ''
+    })
+    return v
   })
-
-  const [values, setValues] = useState(initialValues)
 
   function handleChange(name, value) {
     setValues((prev) => ({

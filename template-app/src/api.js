@@ -8,8 +8,8 @@ export const crud = (url) => ({
   getAll: (params) => api.get(url, { params }),
   getOne: (id) => api.get(`${url}/${id}`),
   create: (data) => api.post(url, data),
-  update: (id, data) => api.patch(`${url}/${id}`, data),
-  remove: (id) => api.delete(`${url}/${id}`),
+  update: (id, data) => api.patch(`${url}${id}`, data),
+  remove: (id) => api.delete(`${url}${id}`),
 });
 
 // export const nomenclatures = crud('supplies/nomenclatures/');
