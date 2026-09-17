@@ -56,6 +56,7 @@ function EntityTable() {
 
       <DynamicTable
         schema={entityTableSchema}
+        title='entity'
         data={items}
         loading={loading}
         onEdit={(row) => setForm({ mode: 'edit', row })}

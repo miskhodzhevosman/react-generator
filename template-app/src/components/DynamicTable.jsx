@@ -8,22 +8,26 @@ function DynamicTable({
   onDelete,
   onCreate,
   createLabel = 'Создать',
+  title, // <-- новый проп
 }) {
   const hasActions = Boolean(onEdit || onDelete)
   const colSpan = schema.length + (hasActions ? 1 : 0)
-  const hasToolbar = Boolean(onCreate)
+  const hasToolbar = Boolean(onCreate) || Boolean(title) // <-- учитываем title
 
   return (
     <div className="dynamic-table-wrapper">
       {hasToolbar && (
         <div className="dynamic-table__toolbar">
-          <button
-            type="button"
-            className="dynamic-table__btn dynamic-table__btn--create"
-            onClick={onCreate}
-          >
-            {createLabel}
-          </button>
+          {title && <h2 className="dynamic-table__title">{title}</h2>} {/* <-- заголовок */}
+          {onCreate && (
+            <button
+              type="button"
+              className="dynamic-table__btn dynamic-table__btn--create"
+              onClick={onCreate}
+            >
+              {createLabel}
+            </button>
+          )}
         </div>
       )}
 
