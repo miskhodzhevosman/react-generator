@@ -1,3 +1,5 @@
+/* DynamicForm.css */
+
 .dynamic-form-wrapper {
   width: 100%;
   padding: 40px 20px;
@@ -19,25 +21,36 @@
     0 12px 32px rgba(0, 0, 0, 0.06);
 }
 
+/* Шапка формы: заголовок и описание — по левому краю */
 .dynamic-form__header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
   margin-bottom: 28px;
 }
 
-.dynamic-form__header h2 {
+/* Заголовок формы — поддерживаем и h2, и .dynamic-form__title */
+.dynamic-form__header h2,
+.dynamic-form__title {
   margin: 0 0 8px;
 
   color: #111827;
   font-size: 26px;
   font-weight: 700;
   line-height: 1.2;
+  text-align: left;
 }
 
-.dynamic-form__header p {
+/* Описание формы — поддерживаем и p, и .dynamic-form__description */
+.dynamic-form__header p,
+.dynamic-form__description {
   margin: 0;
 
   color: #6b7280;
   font-size: 14px;
   line-height: 1.6;
+  text-align: left;
 }
 
 .dynamic-form__fields {
@@ -106,34 +119,7 @@
   outline-offset: 3px;
 }
 
-@media (max-width: 640px) {
-  .dynamic-form-wrapper {
-    padding: 20px 12px;
-  }
-
-  .dynamic-form {
-    padding: 22px;
-    border-radius: 16px;
-  }
-
-  .dynamic-form__fields {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .dynamic-form__field--full {
-    grid-column: auto;
-  }
-
-  .dynamic-form__footer {
-    margin-top: 24px;
-  }
-
-  .dynamic-form__submit {
-    width: 100%;
-  }
-}
-
+/* ===== Поля ввода ===== */
 .dynamic-form input:not([type='checkbox']):not([type='radio']),
 .dynamic-form select,
 .dynamic-form textarea {
@@ -177,5 +163,39 @@
   color: #374151;
   font-size: 13px;
   font-weight: 600;
+  text-align: left;
 }
 
+/* ===== Адаптивность ===== */
+@media (max-width: 640px) {
+  .dynamic-form-wrapper {
+    padding: 20px 12px;
+  }
+
+  .dynamic-form {
+    padding: 22px;
+    border-radius: 16px;
+  }
+
+  .dynamic-form__header h2,
+  .dynamic-form__title {
+    font-size: 22px;
+  }
+
+  .dynamic-form__fields {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .dynamic-form__field--full {
+    grid-column: auto;
+  }
+
+  .dynamic-form__footer {
+    margin-top: 24px;
+  }
+
+  .dynamic-form__submit {
+    width: 100%;
+  }
+}

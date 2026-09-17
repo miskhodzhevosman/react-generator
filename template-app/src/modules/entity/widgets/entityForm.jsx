@@ -32,6 +32,7 @@ function entityForm() {
 
   return (
     <DynamicForm
+      title='entity'
       schema={entityFormSchema}
       onSubmit={handleSubmit}
     />

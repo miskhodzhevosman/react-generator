@@ -37,6 +37,7 @@ function DynamicForm({
   onSubmit,
   title = 'Заполните форму',
   description = 'Введите необходимые данные и отправьте форму.',
+  submitLabel = 'Отправить', // <-- новый проп (опционально)
 }) {
   const [values, setValues] = useState(() => {
     const v = {}
@@ -75,10 +76,10 @@ function DynamicForm({
         onSubmit={handleSubmit}
       >
         <div className="dynamic-form__header">
-          <h2>{title}</h2>
+          {title && <h2 className="dynamic-form__title">{title}</h2>}
 
           {description && (
-            <p>{description}</p>
+            <p className="dynamic-form__description">{description}</p>
           )}
         </div>
 
@@ -125,7 +126,7 @@ function DynamicForm({
             className="dynamic-form__submit"
             type="submit"
           >
-            <span>Отправить</span>
+            <span>{submitLabel}</span>
             <span aria-hidden="true">
               →
             </span>
