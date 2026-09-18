@@ -1,11 +1,13 @@
 /* DynamicForm.css */
 
+/* ===== Обёртка ===== */
 .dynamic-form-wrapper {
+  box-sizing: border-box;
   width: 100%;
   padding: 40px 20px;
-  box-sizing: border-box;
 }
 
+/* ===== Форма ===== */
 .dynamic-form {
   width: 100%;
   max-width: 760px;
@@ -21,16 +23,17 @@
     0 12px 32px rgba(0, 0, 0, 0.06);
 }
 
-/* Шапка формы: заголовок и описание — по левому краю */
+/* ===== Шапка формы ===== */
 .dynamic-form__header {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  text-align: left;
+
   margin-bottom: 28px;
+
+  text-align: left;
 }
 
-/* Заголовок формы — поддерживаем и h2, и .dynamic-form__title */
 .dynamic-form__header h2,
 .dynamic-form__title {
   margin: 0 0 8px;
@@ -42,7 +45,6 @@
   text-align: left;
 }
 
-/* Описание формы — поддерживаем и p, и .dynamic-form__description */
 .dynamic-form__header p,
 .dynamic-form__description {
   margin: 0;
@@ -53,6 +55,7 @@
   text-align: left;
 }
 
+/* ===== Поля ===== */
 .dynamic-form__fields {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -67,6 +70,7 @@
   grid-column: 1 / -1;
 }
 
+/* ===== Подвал формы ===== */
 .dynamic-form__footer {
   display: flex;
   justify-content: flex-end;
@@ -77,6 +81,7 @@
   border-top: 1px solid #f0f1f3;
 }
 
+/* ===== Кнопка отправки ===== */
 .dynamic-form__submit {
   display: inline-flex;
   align-items: center;
@@ -123,9 +128,8 @@
 .dynamic-form input:not([type='checkbox']):not([type='radio']),
 .dynamic-form select,
 .dynamic-form textarea {
-  width: 100%;
   box-sizing: border-box;
-
+  width: 100%;
   min-height: 44px;
   padding: 10px 14px;
 
@@ -133,7 +137,7 @@
   font: inherit;
   font-size: 14px;
 
-  background: #fff;
+  background: #ffffff;
   border: 1px solid #d1d5db;
   border-radius: 10px;
 

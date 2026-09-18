@@ -1,57 +1,65 @@
 /* DynamicTable.css */
 
-/* Обертка для таблицы — колонка: тулбар сверху, таблица снизу */
+/* ===== Обёртка таблицы ===== */
 .dynamic-table-wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
   width: 100%;
+
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
-/* Тулбар над таблицей: заголовок слева, кнопки справа */
+/* ===== Тулбар ===== */
 .dynamic-table__toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+
   padding: 12px 16px;
+
   background-color: #ffffff;
   border-bottom: 1px solid #e9ecef;
 }
 
-/* Заголовок таблицы */
 .dynamic-table__title {
+  overflow: hidden;
+
   margin: 0;
+
+  color: #212529;
   font-size: 16px;
   font-weight: 600;
-  color: #212529;
   line-height: 1.3;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Контейнер для горизонтальной прокрутки на маленьких экранах */
+/* ===== Контейнер прокрутки ===== */
 .dynamic-table-scroll {
-  width: 100%;
   overflow-x: auto;
+
+  width: 100%;
 }
 
-/* Сама таблица */
+/* ===== Таблица ===== */
 .dynamic-table {
   width: 100%;
-  border-collapse: collapse;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-size: 14px;
+
   color: #333333;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+    Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+
   background-color: #ffffff;
+  border-collapse: collapse;
 }
 
-/* Заголовки */
 .dynamic-table thead {
   background-color: #f8f9fa;
   border-bottom: 2px solid #e9ecef;
@@ -59,61 +67,69 @@
 
 .dynamic-table th {
   padding: 12px 16px;
-  text-align: left;
-  font-weight: 600;
+
+  color: #495057;
   font-size: 13px;
+  font-weight: 600;
+  text-align: left;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #495057;
   white-space: nowrap;
 }
 
-/* Ячейки */
 .dynamic-table td {
   padding: 12px 16px;
-  border-bottom: 1px solid #e9ecef;
+
   vertical-align: middle;
   white-space: nowrap;
+
+  border-bottom: 1px solid #e9ecef;
 }
 
-/* Эффект при наведении на строку */
 .dynamic-table tbody tr:hover {
   background-color: #f8f9fa;
+
   transition: background-color 0.15s ease;
 }
 
-/* Последняя строка без нижней границы */
 .dynamic-table tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* Состояние загрузки и отсутствия данных */
+/* ===== Состояния: загрузка и пусто ===== */
 .dynamic-table tbody td[colspan] {
-  text-align: center;
   padding: 40px 16px;
+
   color: #6c757d;
-  font-style: italic;
   font-size: 15px;
+  font-style: italic;
+  text-align: center;
 }
 
-/* Ячейка с действиями */
+/* ===== Ячейка действий ===== */
 .dynamic-table__actions {
   display: flex;
-  gap: 8px;
   align-items: center;
+  gap: 8px;
 }
 
-/* Базовые стили кнопок */
+/* ===== Кнопки ===== */
 .dynamic-table__btn {
   padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
+
+  font-family: inherit;
   font-size: 13px;
   font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
   white-space: nowrap;
-  font-family: inherit;
+
+  border: none;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
 }
 
 .dynamic-table__btn:active {
@@ -125,41 +141,39 @@
   outline-offset: 2px;
 }
 
-/* Кнопка "Создать" */
 .dynamic-table__btn--create {
-  background-color: #1971c2;
   color: #ffffff;
+  background-color: #1971c2;
 }
 
 .dynamic-table__btn--create:hover {
   background-color: #1864ab;
 }
 
-/* Кнопка "Изменить" */
 .dynamic-table__btn--edit {
-  background-color: #e7f5ff;
   color: #1971c2;
+  background-color: #e7f5ff;
 }
 
 .dynamic-table__btn--edit:hover {
   background-color: #d0ebff;
 }
 
-/* Кнопка "Удалить" */
 .dynamic-table__btn--delete {
-  background-color: #fff5f5;
   color: #c92a2a;
+  background-color: #fff5f5;
 }
 
 .dynamic-table__btn--delete:hover {
   background-color: #ffe3e3;
 }
 
-/* Адаптивность для мобильных устройств */
+/* ===== Адаптивность ===== */
 @media (max-width: 600px) {
   .dynamic-table th,
   .dynamic-table td {
     padding: 10px 12px;
+
     font-size: 13px;
   }
 
@@ -180,8 +194,8 @@
   }
 
   .dynamic-table__title {
-    white-space: normal;
     font-size: 15px;
+    white-space: normal;
   }
 
   .dynamic-table__toolbar .dynamic-table__btn {

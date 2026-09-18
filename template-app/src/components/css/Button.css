@@ -1,13 +1,22 @@
+/* Button.css */
+
+/* ===== Базовая кнопка ===== */
 .btn {
   padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
+
+  font-family: inherit;
   font-size: 13px;
   font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
   white-space: nowrap;
-  font-family: inherit;
+
+  border: none;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
 }
 
 .btn:active {
@@ -19,31 +28,47 @@
   outline-offset: 2px;
 }
 
-/* Варианты */
+/* ===== Варианты ===== */
 .btn--default {
-  background-color: #f1f3f5;
   color: #495057;
+  background-color: #f1f3f5;
 }
-.btn--default:hover { background-color: #e9ecef; }
+
+.btn--default:hover {
+  background-color: #e9ecef;
+}
 
 .btn--primary {
-  background-color: #1971c2;
   color: #ffffff;
+  background-color: #1971c2;
 }
-.btn--primary:hover { background-color: #1864ab; }
+
+.btn--primary:hover {
+  background-color: #1864ab;
+}
 
 .btn--edit {
-  background-color: #e7f5ff;
   color: #1971c2;
+  background-color: #e7f5ff;
 }
-.btn--edit:hover { background-color: #d0ebff; }
+
+.btn--edit:hover {
+  background-color: #d0ebff;
+}
 
 .btn--delete {
-  background-color: #fff5f5;
   color: #c92a2a;
+  background-color: #fff5f5;
 }
-.btn--delete:hover { background-color: #ffe3e3; }
 
+.btn--delete:hover {
+  background-color: #ffe3e3;
+}
+
+/* ===== Адаптивность ===== */
 @media (max-width: 600px) {
-  .btn { width: 100%; padding: 8px 10px; }
+  .btn {
+    width: 100%;
+    padding: 8px 10px;
+  }
 }

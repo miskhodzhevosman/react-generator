@@ -1,28 +1,41 @@
+/* Pagination.css */
+
+/* ===== Пагинация ===== */
 .pagination {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+
   margin: 16px 0;
+
   font-family: inherit;
   user-select: none;
 }
 
+/* ===== Кнопки ===== */
 .pagination button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   width: 36px;
   height: 36px;
   padding: 0;
-  border: 1px solid #d0d7de;
-  border-radius: 8px;
-  background-color: #fff;
+
   color: #24292f;
   font-size: 16px;
   line-height: 1;
+
+  background-color: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease,
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
     transform 0.1s ease;
 }
 
@@ -41,15 +54,19 @@
 }
 
 .pagination button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
   background-color: #f6f8fa;
+
+  opacity: 0.4;
+
+  cursor: not-allowed;
 }
 
+/* ===== Счётчик страниц ===== */
 .pagination span {
   min-width: 64px;
-  text-align: center;
+
+  color: #57606a;
   font-size: 14px;
   font-weight: 500;
-  color: #57606a;
+  text-align: center;
 }

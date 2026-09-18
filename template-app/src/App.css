@@ -1,23 +1,32 @@
+/* App.css */
+
+/* ===== Каркас приложения ===== */
 .app {
   display: flex;
+
   min-height: 100vh;
 }
 
-/* Боковая панель */
+/* ===== Боковая панель ===== */
 .sidebar {
-  width: 240px;
-  background: #1e293b;
-  color: #fff;
-  padding: 20px 0;
   flex-shrink: 0;
+
+  width: 240px;
+  padding: 20px 0;
+
+  color: #ffffff;
+
+  background: #1e293b;
 }
 
 .logo {
+  margin-bottom: 10px;
+  padding: 0 20px 20px;
+
   font-size: 20px;
   font-weight: bold;
-  padding: 0 20px 20px;
+
   border-bottom: 1px solid #334155;
-  margin-bottom: 10px;
 }
 
 .sidebar nav {
@@ -25,32 +34,41 @@
   flex-direction: column;
 }
 
+/* ===== Навигация ===== */
 .nav-link {
   display: flex;
   align-items: center;
   gap: 12px;
+
   padding: 12px 20px;
+
   color: #cbd5e1;
   text-decoration: none;
-  transition: background 0.2s, color 0.2s;
+
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
 .nav-link:hover {
+  color: #ffffff;
+
   background: #334155;
-  color: #fff;
 }
 
 .nav-link.active {
+  color: #ffffff;
+
   background: #3b82f6;
-  color: #fff;
 }
 
 .icon {
   font-size: 18px;
 }
 
-/* Контент */
+/* ===== Контент ===== */
 .content {
   flex: 1;
+
   padding: 40px;
 }
