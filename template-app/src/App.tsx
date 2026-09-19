@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
-import MainPage from './modules/entity/entityMainView.jsx'
+import MainPage from './modules/nomenclature/nomenclatureMainView.jsx'
 import './App.css'
 
 function App() {

@@ -1,4 +1,3 @@
 import { crud } from '../../api.js'
 
-export const entityApi = crud('supplies/nomenclatures/')
-
+export const entityApi = crud('entity_endpoint')
