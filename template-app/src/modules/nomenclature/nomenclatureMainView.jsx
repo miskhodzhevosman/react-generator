@@ -5,6 +5,8 @@ function MainPage() {
     <div>
       <h1>nomenclature</h1>
       <NomeclatureTable  />
+      
+      <NomeclatureTable  />
     </div>
   )
 }
