@@ -7,7 +7,8 @@ type MenuItem = {
 }
 
 const menuItems: MenuItem[] = [
-  { path: '/entity', label: 'entity', icon: '🏠' },
+  { path: '/nomenclature', label: 'nomenclature', icon: '🏠' },
+  { path: '/project', label: 'project', icon: '🏠' },
 ]
 
 function Sidebar() {

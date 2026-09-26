@@ -1,44 +1,63 @@
 export const nomenclatureFormSchema = [
   {
     name: 'type',
-    type: 'text',
-    label: 'Тип',
+    type: 'select',
+    label: 'type',
     placeholder: 'Например PRODUCT',
+    options: [
+      {
+        value: 'PRODUCT',
+        label: 'Товар',
+      },
+      {
+        value: 'SERVICE',
+        label: 'Услуга',
+      },
+    ],
   },
-
   {
     name: 'name',
     type: 'text',
-    label: 'Название',
-    placeholder: 'Введите название',
+    label: 'name',
+    placeholder: 'Введите name',
   },
-
   {
     name: 'technical_name',
     type: 'text',
-    label: 'Техническое название',
-    placeholder: 'Введите техническое название',
+    label: 'technical name',
+    placeholder: 'Введите technical name',
   },
-
   {
     name: 'article',
     type: 'text',
-    label: 'Артикул',
-    placeholder: 'Введите артикул',
+    label: 'article',
+    placeholder: 'Введите article',
   },
-
+  {
+    name: 'factory',
+    type: 'int',
+    label: 'factory',
+    placeholder: 'Введите id',
+  },
   {
     name: 'current_cost_price',
     type: 'number',
-    label: 'Себестоимость',
-    placeholder: 'Введите себестоимость',
+    label: 'current cost price',
+    placeholder: 'Введите current cost price',
+    step: '0.01',
   },
-
   {
     name: 'current_sale_price',
     type: 'number',
-    label: 'Цена продажи',
-    placeholder: 'Введите цену продажи',
+    label: 'current sale price',
+    placeholder: 'Введите current sale price',
+    step: '0.01',
+  },
+  {
+    name: 'created_at',
+    type: 'datetime',
+    label: 'created at',
+    placeholder: 'Введите created at',
   },
 ]
 
@@ -46,22 +65,38 @@ export const nomenclatureFormSchema = [
 export const nomenclatureTableSchema = [
   {
     name: 'id',
-    label: 'id',
+    label: 'ID',
+  },
+  {
+    name: 'type',
+    label: 'type',
   },
   {
     name: 'name',
-    label: 'Название',
+    label: 'name',
+  },
+  {
+    name: 'technical_name',
+    label: 'technical name',
   },
   {
     name: 'article',
-    label: 'Артикул',
+    label: 'article',
+  },
+  {
+    name: 'factory',
+    label: 'factory',
   },
   {
     name: 'current_cost_price',
-    label: 'Себестоимость',
+    label: 'current cost price',
   },
   {
     name: 'current_sale_price',
-    label: 'Цена продажи',
+    label: 'current sale price',
+  },
+  {
+    name: 'created_at',
+    label: 'created at',
   },
 ]

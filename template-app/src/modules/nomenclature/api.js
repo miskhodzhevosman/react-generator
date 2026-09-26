@@ -1,3 +1,3 @@
 import { crud } from '../../api.js'
 
-export const nomenclatureApi = crud('supplies/nomenclatures/')
+export const nomenclatureApi = crud('supply/nomenclature/')

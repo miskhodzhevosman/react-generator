@@ -1,9 +1,9 @@
-import NomeclatureTable from './widgets/nomenclatureTable.jsx'
+import NomeclatureTable from './widgets/financialtransactionTable.jsx'
 
 function MainPage() {
   return (
     <div>
-      <h1>nomenclature</h1>
+      <h1>financialtransaction</h1>
       <NomeclatureTable  />
     </div>
   )

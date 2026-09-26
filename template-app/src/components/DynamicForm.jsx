@@ -28,6 +28,7 @@ const fieldComponents = {
   datetime: DateTimeField,
   textarea: TextareaField,
   file: FileField,
+  int: NumberField,
 }
 
 function DynamicForm({
