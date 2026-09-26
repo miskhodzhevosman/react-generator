@@ -157,9 +157,9 @@ def get_field_type(field) -> str:
     # choices → select
     if getattr(field, "choices", None):
         return "select"
-    # связи → select
+    # связи → int (id)
     if field.get_internal_type() in RELATION_FIELDS:
-        return "select"
+        return "int"
     return FIELD_TYPE_MAP.get(field.get_internal_type(), "text")
 
 
@@ -182,7 +182,7 @@ def get_placeholder(field, field_type: str) -> str:
             first_value = ""
         return f"Например {first_value}"
     if field.get_internal_type() in RELATION_FIELDS:
-        return "Например id"
+        return "Введите id"
     return f"Введите {get_label(field)}"
 
 
@@ -235,28 +235,10 @@ def field_to_table_entry(field) -> dict:
 FORM_EXCLUDE = {"id", "updated_at"}
 
 
-def collect_model_fields(model):
-    """Возвращает список полей модели в порядке объявления."""
-    return list(model._meta.get_fields())
-
-
-def filter_concrete_fields(fields):
-    """Оставляет только конкретные поля (не обратные связи)."""
-    result = []
-    for f in fields:
-        # обратные связи (related_name) — пропускаем
-        if getattr(f, "auto_created", False) and not getattr(f, "concrete", False):
-            continue
-        if not getattr(f, "concrete", False) and not getattr(f, "many_to_many", False):
-            continue
-        result.append(f)
-    return result
-
-
 def collect_ordered_fields(model):
     """
     Поля модели в порядке объявления: сначала concrete (по creation_counter),
-    затем M2M (по creation_counter).
+    затем M2M (по creation_counter). Обратные связи пропускаются.
     """
     concrete = []
     m2m = []
@@ -282,7 +264,6 @@ def _js_value(value) -> str:
         return str(value)
     if value is None:
         return "null"
-    # строка
     s = str(value).replace("\\", "\\\\").replace("'", "\\'")
     return f"'{s}'"
 
