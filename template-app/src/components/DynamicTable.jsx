@@ -1,4 +1,4 @@
-import './css/DynamicTable.css'
+import { Table, Group, Button, Loader, Text, Paper, Center } from '@mantine/core'
 
 function DynamicTable({
   schema,
@@ -8,86 +8,96 @@ function DynamicTable({
   onDelete,
   onCreate,
   createLabel = 'Создать',
-  title, // <-- новый проп
+  title,
 }) {
   const hasActions = Boolean(onEdit || onDelete)
   const colSpan = schema.length + (hasActions ? 1 : 0)
-  const hasToolbar = Boolean(onCreate) || Boolean(title) // <-- учитываем title
+  const hasToolbar = Boolean(onCreate) || Boolean(title)
 
   return (
-    <div className="dynamic-table-wrapper">
+    <Paper shadow="sm" p="md" radius="md" withBorder>
       {hasToolbar && (
-        <div className="dynamic-table__toolbar">
-          {title && <h2 className="dynamic-table__title">{title}</h2>} {/* <-- заголовок */}
-          {onCreate && (
-            <button
-              type="button"
-              className="dynamic-table__btn dynamic-table__btn--create"
-              onClick={onCreate}
-            >
-              {createLabel}
-            </button>
+        <Group justify="space-between" mb="md">
+          {title && (
+            <Text size="lg" fw={600}>
+              {title}
+            </Text>
           )}
-        </div>
+          {onCreate && (
+            <Button onClick={onCreate} variant="filled">
+              {createLabel}
+            </Button>
+          )}
+        </Group>
       )}
 
-      <div className="dynamic-table-scroll">
-        <table className="dynamic-table">
-          <thead>
-            <tr>
+      <Table.ScrollContainer minWidth={500}>
+        <Table striped highlightOnHover withTableBorder>
+          <Table.Thead>
+            <Table.Tr>
               {schema.map((column) => (
-                <th key={column.name}>{column.label}</th>
+                <Table.Th key={column.name}>{column.label}</Table.Th>
               ))}
-              {hasActions && <th>Действия</th>}
-            </tr>
-          </thead>
+              {hasActions && <Table.Th>Действия</Table.Th>}
+            </Table.Tr>
+          </Table.Thead>
 
-          <tbody>
+          <Table.Tbody>
             {loading ? (
-              <tr>
-                <td colSpan={colSpan}>Загрузка...</td>
-              </tr>
+              <Table.Tr>
+                <Table.Td colSpan={colSpan}>
+                  <Center py="md">
+                    <Loader size="sm" />
+                  </Center>
+                </Table.Td>
+              </Table.Tr>
             ) : !data || data.length === 0 ? (
-              <tr>
-                <td colSpan={colSpan}>Нет данных</td>
-              </tr>
+              <Table.Tr>
+                <Table.Td colSpan={colSpan}>
+                  <Text ta="center" c="dimmed" py="md">
+                    Нет данных
+                  </Text>
+                </Table.Td>
+              </Table.Tr>
             ) : (
               data.map((row) => (
-                <tr key={row.id}>
+                <Table.Tr key={row.id}>
                   {schema.map((column) => (
-                    <td key={column.name}>{row[column.name]}</td>
+                    <Table.Td key={column.name}>{row[column.name]}</Table.Td>
                   ))}
 
                   {hasActions && (
-                    <td className="dynamic-table__actions">
-                      {onEdit && (
-                        <button
-                          type="button"
-                          className="dynamic-table__btn dynamic-table__btn--edit"
-                          onClick={() => onEdit(row)}
-                        >
-                          Изменить
-                        </button>
-                      )}
-
-                      {onDelete && (
-                        <button
-                          type="button"
-                          className="dynamic-table__btn dynamic-table__btn--delete"
-                          onClick={() => onDelete(row)}
-                        >
-                          Удалить
-                        </button>
-                      )}
-                    </td>
+                    <Table.Td>
+                      <Group gap="xs">
+                        {onEdit && (
+                          <Button
+                            size="xs"
+                            variant="light"
+                            onClick={() => onEdit(row)}
+                          >
+                            Изменить
+                          </Button>
+                        )}
+                        {onDelete && (
+                          <Button
+                            size="xs"
+                            variant="light"
+                            color="red"
+                            onClick={() => onDelete(row)}
+                          >
+                            Удалить
+                          </Button>
+                        )}
+                      </Group>
+                    </Table.Td>
                   )}
-                </tr>
+                </Table.Tr>
               ))
             )}
-          </tbody>
-        </table>
-      </div>
-    </div>
+          </Table.Tbody>
+        </Table>
+      </Table.ScrollContainer>
+    </Paper>
   )
 }
 

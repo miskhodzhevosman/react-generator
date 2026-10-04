@@ -1,4 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
+import { AppShell } from '@mantine/core'
+
 import Sidebar from './components/Sidebar'
 import CounterpartyPage from './modules/counterparty/counterpartyMainView'
 import HistoricalcounterpartyPage from './modules/historicalcounterparty/historicalcounterpartyMainView'
@@ -16,13 +18,18 @@ import LocationPage from './modules/location/locationMainView'
 import NomenclaturePage from './modules/nomenclature/nomenclatureMainView'
 import NomenclaturefilePage from './modules/nomenclaturefile/nomenclaturefileMainView'
 import NomenclatureimagePage from './modules/nomenclatureimage/nomenclatureimageMainView'
-import './App.css'
 
 function App() {
   return (
-    <div className="app">
-      <Sidebar />
-      <main className="content">
+    <AppShell
+      navbar={{ width: 260, breakpoint: 'sm' }}
+      padding="md"
+    >
+      <AppShell.Navbar>
+        <Sidebar />
+      </AppShell.Navbar>
+
+      <AppShell.Main>
         <Routes>
           <Route path="/counterparty" element={<CounterpartyPage />} />
           <Route path="/historicalcounterparty" element={<HistoricalcounterpartyPage />} />
@@ -41,8 +48,8 @@ function App() {
           <Route path="/nomenclaturefile" element={<NomenclaturefilePage />} />
           <Route path="/nomenclatureimage" element={<NomenclatureimagePage />} />
         </Routes>
-      </main>
-    </div>
+      </AppShell.Main>
+    </AppShell>
   )
 }
 

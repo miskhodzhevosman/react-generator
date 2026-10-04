@@ -1,22 +1,25 @@
+import { Radio } from '@mantine/core'
+
 function RadioField({ field, value, onChange }) {
   return (
-    <div>
-      <label>{field.label}</label>
-
+    <Radio.Group
+      label={field.label}
+      value={value}
+      onChange={onChange}
+      name={field.name}
+      required={field.required}
+      withAsterisk={field.required}
+      description={field.description}
+      error={field.error}
+    >
       {field.options.map((option) => (
-        <label key={option}>
-          <input
-            type="radio"
-            name={field.name}
-            value={option}
-            checked={value === option}
-            onChange={(e) => onChange(e.target.value)}
-          />
-
-          {option}
-        </label>
+        <Radio
+          key={option}
+          value={option}
+          label={option}
+        />
       ))}
-    </div>
+    </Radio.Group>
   )
 }
 

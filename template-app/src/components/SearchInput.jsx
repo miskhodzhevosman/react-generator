@@ -1,29 +1,45 @@
-// components/SearchInput.jsx
-import './css/SearchInput.css'
-
 import { useEffect, useState } from 'react'
+import { TextInput, CloseButton } from '@mantine/core'
 
-function SearchInput({ value, onChange, placeholder = 'Поиск...', delay = 400, minLength = 3 }) {
+function SearchInput({
+  value,
+  onChange,
+  placeholder = 'Поиск...',
+  delay = 400,
+  minLength = 3,
+}) {
   const [local, setLocal] = useState(value ?? '')
 
   // синхронизация при внешнем сбросе
-  useEffect(() => { setLocal(value ?? '') }, [value])
+  useEffect(() => {
+    setLocal(value ?? '')
+  }, [value])
 
   useEffect(() => {
     if (local === value) return
-    if (local.length > 0 && local.length < minLength) return  // ждём минимум символов
+    if (local.length > 0 && local.length < minLength) return
 
     const t = setTimeout(() => onChange(local), delay)
     return () => clearTimeout(t)
   }, [local, delay, minLength, onChange, value])
 
   return (
-    <input
-      className="search-input"
+    <TextInput
       value={local}
-      onChange={(e) => setLocal(e.target.value)}
+      onChange={(event) => setLocal(event.currentTarget.value)}
       placeholder={placeholder}
+      leftSection="🔍"
+      rightSection={
+        local ? (
+          <CloseButton
+            size="sm"
+            onClick={() => setLocal('')}
+            aria-label="Очистить поиск"
+          />
+        ) : null
+      }
     />
   )
 }
+
 export default SearchInput

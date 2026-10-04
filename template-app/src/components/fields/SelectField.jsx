@@ -1,22 +1,22 @@
+import { Select } from '@mantine/core'
+
 function SelectField({ field, value, onChange }) {
   return (
-    <div>
-      <label>{field.label}</label>
-
-      <select
-        name={field.name}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      >
-        <option value="">Выберите</option>
-
-        {field.options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <Select
+      label={field.label}
+      placeholder={field.placeholder || 'Выберите'}
+      value={value}
+      onChange={onChange}
+      data={field.options}
+      required={field.required}
+      description={field.description}
+      error={field.error}
+      disabled={field.disabled}
+      withAsterisk={field.required}
+      clearable
+      searchable
+      nothingFoundMessage="Ничего не найдено"
+    />
   )
 }
 

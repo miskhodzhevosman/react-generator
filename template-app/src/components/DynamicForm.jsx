@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button, Paper, Stack, SimpleGrid, Title, Text, Box } from '@mantine/core'
 
 import TextField from './fields/TextField'
 import NumberField from './fields/NumberField'
@@ -12,8 +13,6 @@ import DateField from './fields/DateField'
 import DateTimeField from './fields/DateTimeField'
 import TextareaField from './fields/TextareaField'
 import FileField from './fields/FileField'
-
-import './css/DynamicForm.css'
 
 const fieldComponents = {
   text: TextField,
@@ -38,6 +37,14 @@ function isFileType(field) {
   return FILE_TYPES.has(field.type)
 }
 
+const FULL_WIDTH_TYPES = new Set([
+  'textarea',
+  'file',
+  'image',
+  'checkbox',
+  'radio',
+])
+
 function DynamicForm({
   schema,
   data = {},
@@ -50,11 +57,7 @@ function DynamicForm({
   const [values, setValues] = useState(() => {
     const v = {}
     schema.forEach((field) => {
-      if (isFileType(field)) {
-        // Файл НЕ инициализируем из initialValues:
-        // в values он попадёт только если пользователь выберет новый файл.
-        return
-      }
+      if (isFileType(field)) return
       v[field.name] = initialValuesProp[field.name] ?? ''
     })
     return v
@@ -75,8 +78,6 @@ function DynamicForm({
       (v) => v instanceof File || v instanceof Blob
     )
 
-    // Если в схеме есть файлы — всегда отправляем FormData,
-    // чтобы не смешивать JSON и multipart.
     if (hasFileField) {
       const fd = new FormData()
 
@@ -85,8 +86,6 @@ function DynamicForm({
         if (v === undefined || v === null || v === '') return
 
         if (isFileType(field)) {
-          // строку (URL старого файла) не отправляем — она и не должна
-          // попадать в values, но подстрахуемся
           if (v instanceof File || v instanceof Blob) {
             fd.append(field.name, v)
           }
@@ -104,7 +103,6 @@ function DynamicForm({
       return
     }
 
-    // Нет file-полей — обычный JSON
     onSubmit(values, { values, hasNewFile: false })
   }
 
@@ -115,36 +113,47 @@ function DynamicForm({
   }
 
   return (
-    <div className="dynamic-form-wrapper">
-      <form className="dynamic-form" onSubmit={handleSubmit}>
-        <div className="dynamic-form__header">
-          {title && <h2 className="dynamic-form__title">{title}</h2>}
-          {description && (
-            <p className="dynamic-form__description">{description}</p>
-          )}
-        </div>
+    <Paper
+      component="form"
+      onSubmit={handleSubmit}
+      shadow="sm"
+      p="xl"
+      radius="md"
+      withBorder
+      maw={720}
+      mx="auto"
+    >
+      <Stack gap="lg">
+        {(title || description) && (
+          <Box>
+            {title && (
+              <Title order={3} mb={4}>
+                {title}
+              </Title>
+            )}
+            {description && (
+              <Text c="dimmed" size="sm">
+                {description}
+              </Text>
+            )}
+          </Box>
+        )}
 
-        <div className="dynamic-form__fields">
+        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
           {schema.map((field) => {
             const FieldComponent = fieldComponents[field.type]
             if (!FieldComponent) return null
 
             const fieldData = getFieldData(field)
-
-            const isFullWidth =
-              field.type === 'textarea' ||
-              field.type === 'file' ||
-              field.type === 'image' ||
-              field.type === 'checkbox' ||
-              field.type === 'radio'
+            const isFullWidth = FULL_WIDTH_TYPES.has(field.type)
 
             return (
-              <div
+              <Box
                 key={field.name}
-                className={
+                style={
                   isFullWidth
-                    ? 'dynamic-form__field dynamic-form__field--full'
-                    : 'dynamic-form__field'
+                    ? { gridColumn: '1 / -1' }
+                    : undefined
                 }
               >
                 <FieldComponent
@@ -154,19 +163,16 @@ function DynamicForm({
                   dataSource={fieldData}
                   onChange={(value) => handleChange(field.name, value)}
                 />
-              </div>
+              </Box>
             )
           })}
-        </div>
+        </SimpleGrid>
 
-        <div className="dynamic-form__footer">
-          <button className="dynamic-form__submit" type="submit">
-            <span>{submitLabel}</span>
-            <span aria-hidden="true">→</span>
-          </button>
-        </div>
-      </form>
-    </div>
+        <Button type="submit" rightSection="→" size="md" fullWidth={false}>
+          {submitLabel}
+        </Button>
+      </Stack>
+    </Paper>
   )
 }
 

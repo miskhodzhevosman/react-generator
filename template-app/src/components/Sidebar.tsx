@@ -1,4 +1,6 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink as RouterNavLink, useLocation } from 'react-router-dom'
+import { NavLink, Stack, Text, ScrollArea, Box, Group } from '@mantine/core'
+import ColorSchemeToggle from './ColorSchemeToggle'
 
 type MenuItem = {
   path: string
@@ -6,43 +8,51 @@ type MenuItem = {
 }
 
 const menuItems: MenuItem[] = [
-  { path: '/counterparty', label: 'counterparty' },
-  { path: '/historicalcounterparty', label: 'historicalcounterparty' },
-  { path: '/historicalproject', label: 'historicalproject' },
-  { path: '/historicalprojectitem', label: 'historicalprojectitem' },
-  { path: '/historicalprojectstatus', label: 'historicalprojectstatus' },
-  { path: '/project', label: 'project' },
-  { path: '/projectfile', label: 'projectfile' },
-  { path: '/projectitem', label: 'projectitem' },
-  { path: '/projectstatus', label: 'projectstatus' },
-  { path: '/financeoperationtype', label: 'financeoperationtype' },
-  { path: '/financialtransaction', label: 'financialtransaction' },
-  { path: '/factoryfile', label: 'factoryfile' },
-  { path: '/location', label: 'location' },
-  { path: '/nomenclature', label: 'nomenclature' },
-  { path: '/nomenclaturefile', label: 'nomenclaturefile' },
-  { path: '/nomenclatureimage', label: 'nomenclatureimage' },
+  { path: '/counterparty', label: 'Counterparty' },
+  { path: '/historicalcounterparty', label: 'Historical Counterparty' },
+  { path: '/historicalproject', label: 'Historical Project' },
+  { path: '/historicalprojectitem', label: 'Historical Project Item' },
+  { path: '/historicalprojectstatus', label: 'Historical Project Status' },
+  { path: '/project', label: 'Project' },
+  { path: '/projectfile', label: 'Project File' },
+  { path: '/projectitem', label: 'Project Item' },
+  { path: '/projectstatus', label: 'Project Status' },
+  { path: '/financeoperationtype', label: 'Finance Operation Type' },
+  { path: '/financialtransaction', label: 'Financial Transaction' },
+  { path: '/factoryfile', label: 'Factory File' },
+  { path: '/location', label: 'Location' },
+  { path: '/nomenclature', label: 'Nomenclature' },
+  { path: '/nomenclaturefile', label: 'Nomenclature File' },
+  { path: '/nomenclatureimage', label: 'Nomenclature Image' },
 ]
 
 function Sidebar() {
+  const { pathname } = useLocation()
+
   return (
-    <aside className="sidebar">
-      <div className="logo">ERP APP</div>
-      <nav>
-        {menuItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            end={item.path === '/'}
-            className={({ isActive }) =>
-              `nav-link ${isActive ? 'active' : ''}`
-            }
-          >
-            <span>{item.label}</span>
-          </NavLink>
-        ))}
-      </nav>
-    </aside>
+    <Box p="md" h="100%">
+      <Group justify="space-between" align="center" mb="lg">
+        <Text size="xl" fw={700}>
+          ERP APP
+        </Text>
+        <ColorSchemeToggle />
+      </Group>
+
+      <ScrollArea h="calc(100% - 60px)">
+        <Stack gap={4}>
+          {menuItems.map((item) => (
+            <NavLink
+              key={item.path}
+              component={RouterNavLink}
+              to={item.path}
+              label={item.label}
+              active={pathname === item.path}
+              variant="light"
+            />
+          ))}
+        </Stack>
+      </ScrollArea>
+    </Box>
   )
 }
 

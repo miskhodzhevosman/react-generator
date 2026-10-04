@@ -1,15 +1,16 @@
+import { DateTimePicker } from '@mantine/dates'
+
 function DateTimeField({ field, value, onChange }) {
   return (
-    <div>
-      <label>{field.label}</label>
-
-      <input
-        type="datetime-local"
-        name={field.name}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    </div>
+    <DateTimePicker
+      label={field.label}
+      placeholder={field.placeholder || 'Выберите дату и время'}
+      value={value}
+      onChange={(date) => onChange(date)}
+      required={field.required}
+      clearable
+      valueFormat="DD.MM.YYYY HH:mm" // Формат отображения: 31.12.2025 14:30
+    />
   )
 }
 

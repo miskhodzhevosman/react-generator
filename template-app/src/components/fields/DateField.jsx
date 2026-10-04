@@ -1,15 +1,17 @@
+import { DateInput } from '@mantine/dates'
+
 function DateField({ field, value, onChange }) {
   return (
-    <div>
-      <label>{field.label}</label>
-
-      <input
-        type="date"
-        name={field.name}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    </div>
+    <DateInput
+      label={field.label}
+      placeholder={field.placeholder || 'Выберите дату'}
+      value={value}
+      onChange={(date) => onChange(date)}
+      required={field.required}
+      clearable
+      valueFormat="DD.MM.YYYY" // Формат отображения: 31.12.2025
+      // minDate={new Date()} // Раскомментируйте, если нужно запретить прошлые даты
+    />
   )
 }
 

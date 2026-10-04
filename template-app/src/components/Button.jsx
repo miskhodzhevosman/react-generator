@@ -1,15 +1,15 @@
-import './css/Button.css'
+import { Button as MantineButton } from '@mantine/core'
 
 function Button({ children, variant = 'default', onClick, type = 'button', ...rest }) {
   return (
-    <button
+    <MantineButton
       type={type}
-      className={`btn btn--${variant}`}
+      variant={variant}
       onClick={onClick}
       {...rest}
     >
       {children}
-    </button>
+    </MantineButton>
   )
 }
 

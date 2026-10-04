@@ -1,49 +1,58 @@
+import { FileInput, Image, Anchor, Text, Stack } from '@mantine/core'
+
 function FileField({ field, value, initial, onChange }) {
   const isImage = field.type === 'image'
 
   return (
-    <div className="file-field">
-      <label className="file-field__label">{field.label}</label>
+    <Stack gap="xs">
+      <FileInput
+        label={field.label}
+        placeholder={field.placeholder || 'Выберите файл'}
+        accept={field.accept}
+        value={value instanceof File ? value : null}
+        onChange={(file) => {
+          if (file) onChange(file)
+          // если пользователь очистил — не трогаем values,
+          // старое значение не должно вернуться как строка
+        }}
+        required={field.required}
+        description={field.description}
+        error={field.error}
+        disabled={field.disabled}
+        withAsterisk={field.required}
+        clearable
+      />
 
       {initial && typeof initial === 'string' && (
-        <div className="file-field__current">
+        <div>
           {isImage ? (
-            <img
+            <Image
               src={initial}
               alt={field.label}
-              className="file-field__preview"
+              w={120}
+              h={120}
+              fit="cover"
+              radius="sm"
             />
           ) : (
-            <a
+            <Anchor
               href={initial}
               target="_blank"
               rel="noreferrer"
-              className="file-field__link"
+              size="sm"
             >
-              текущий файл
-            </a>
+              Текущий файл
+            </Anchor>
           )}
         </div>
       )}
 
-      <input
-        type="file"
-        name={field.name}
-        accept={field.accept}
-        onChange={(e) => {
-          const f = e.target.files[0]
-          if (f) onChange(f)
-          // если пользователь очистил input — не трогаем values,
-          // старое значение не должно вернуться как строка
-        }}
-      />
-
       {value instanceof File && (
-        <span className="file-field__new">
-          выбран: {value.name} ({Math.round(value.size / 1024)} KB)
-        </span>
+        <Text size="xs" c="dimmed">
+          Выбран: {value.name} ({Math.round(value.size / 1024)} KB)
+        </Text>
       )}
-    </div>
+    </Stack>
   )
 }
 
