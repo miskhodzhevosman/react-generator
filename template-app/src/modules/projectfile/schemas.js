@@ -7,7 +7,7 @@ export const projectfileFormSchema = [
   },
   {
     name: 'file',
-    type: 'text',
+    type: 'file',
     label: 'Файл',
     placeholder: 'Введите Файл',
   },

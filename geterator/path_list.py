@@ -10,7 +10,9 @@ main_view_path = '../template-app/src/modules/entity/entityMainView.jsx'
 form_path = '../template-app/src/modules/entity/widgets/entityForm.jsx'
 table_path = '../template-app/src/modules/entity/widgets/entityTable.jsx'
 
-app_path = '../template-app/src/App.tsx'
+app_import_path = '../template-app/src/App.tsx'
+app_path = "../template-app/src/App.tsx"
+sidebar_path = '../template-app/src/components/Sidebar.tsx'
 
 project_path = '../../nuven-mvp/'
 

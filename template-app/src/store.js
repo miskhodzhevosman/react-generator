@@ -9,12 +9,10 @@ export const createCrudStore = (api) =>
     loaded: false,
     error: null,
 
-    // пагинация
     page: 1,
     pageSize: 10,
     count: 0,
 
-    // поиск
     q: '',
 
     // ─────────── READ (список) ───────────
@@ -41,19 +39,7 @@ export const createCrudStore = (api) =>
         throw error
       }
     },
-    remove: async (id) => {
-  set({ loading: true, error: null })
-  try {
-    await api.remove(id)
-    set({ loading: false })
-    return get().reload()
-  } catch (error) {
-    set({ error, loading: false })
-    throw error
-  }
-},
 
-    // принудительный рефетч (сбрасывает loaded)
     reload: async (params = {}) => {
       set({ loaded: false })
       return get().getAll(params)
@@ -78,8 +64,6 @@ export const createCrudStore = (api) =>
       try {
         const { data: created } = await api.create(data)
 
-        // если мы на 1-й странице без поиска — можно добавить локально,
-        // иначе корректнее перезапросить список
         if (get().page === 1 && !get().q) {
           set((state) => ({
             items: [created, ...state.items],
@@ -130,7 +114,6 @@ export const createCrudStore = (api) =>
           loading: false,
         }))
 
-        // если страница опустела — вернуться на предыдущую
         if (get().items.length === 0 && get().page > 1) {
           await get().reload({ page: get().page - 1 })
         }

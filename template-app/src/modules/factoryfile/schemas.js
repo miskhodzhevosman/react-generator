@@ -7,7 +7,7 @@ export const factoryfileFormSchema = [
   },
   {
     name: 'file',
-    type: 'text',
+    type: 'file',
     label: 'Файл',
     placeholder: 'Введите Файл',
   },

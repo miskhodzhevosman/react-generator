@@ -28,7 +28,14 @@ const fieldComponents = {
   datetime: DateTimeField,
   textarea: TextareaField,
   file: FileField,
+  image: FileField,
   int: NumberField,
+}
+
+const FILE_TYPES = new Set(['file', 'image'])
+
+function isFileType(field) {
+  return FILE_TYPES.has(field.type)
 }
 
 function DynamicForm({
@@ -38,11 +45,16 @@ function DynamicForm({
   onSubmit,
   title = 'Заполните форму',
   description = 'Введите необходимые данные и отправьте форму.',
-  submitLabel = 'Отправить', // <-- новый проп (опционально)
+  submitLabel = 'Отправить',
 }) {
   const [values, setValues] = useState(() => {
     const v = {}
     schema.forEach((field) => {
+      if (isFileType(field)) {
+        // Файл НЕ инициализируем из initialValues:
+        // в values он попадёт только если пользователь выберет новый файл.
+        return
+      }
       v[field.name] = initialValuesProp[field.name] ?? ''
     })
     return v
@@ -57,28 +69,56 @@ function DynamicForm({
 
   function handleSubmit(event) {
     event.preventDefault()
-    onSubmit(values)
+
+    const hasFileField = schema.some(isFileType)
+    const hasNewFile = Object.values(values).some(
+      (v) => v instanceof File || v instanceof Blob
+    )
+
+    // Если в схеме есть файлы — всегда отправляем FormData,
+    // чтобы не смешивать JSON и multipart.
+    if (hasFileField) {
+      const fd = new FormData()
+
+      schema.forEach((field) => {
+        const v = values[field.name]
+        if (v === undefined || v === null || v === '') return
+
+        if (isFileType(field)) {
+          // строку (URL старого файла) не отправляем — она и не должна
+          // попадать в values, но подстрахуемся
+          if (v instanceof File || v instanceof Blob) {
+            fd.append(field.name, v)
+          }
+          return
+        }
+
+        if (typeof v === 'object') {
+          fd.append(field.name, JSON.stringify(v))
+        } else {
+          fd.append(field.name, v)
+        }
+      })
+
+      onSubmit(fd, { values, hasNewFile })
+      return
+    }
+
+    // Нет file-полей — обычный JSON
+    onSubmit(values, { values, hasNewFile: false })
   }
 
   function getFieldData(field) {
     const key = field.options?.key
-
-    if (!key) {
-      return null
-    }
-
+    if (!key) return null
     return data[key] || null
   }
 
   return (
     <div className="dynamic-form-wrapper">
-      <form
-        className="dynamic-form"
-        onSubmit={handleSubmit}
-      >
+      <form className="dynamic-form" onSubmit={handleSubmit}>
         <div className="dynamic-form__header">
           {title && <h2 className="dynamic-form__title">{title}</h2>}
-
           {description && (
             <p className="dynamic-form__description">{description}</p>
           )}
@@ -87,16 +127,14 @@ function DynamicForm({
         <div className="dynamic-form__fields">
           {schema.map((field) => {
             const FieldComponent = fieldComponents[field.type]
-
-            if (!FieldComponent) {
-              return null
-            }
+            if (!FieldComponent) return null
 
             const fieldData = getFieldData(field)
 
             const isFullWidth =
               field.type === 'textarea' ||
               field.type === 'file' ||
+              field.type === 'image' ||
               field.type === 'checkbox' ||
               field.type === 'radio'
 
@@ -112,10 +150,9 @@ function DynamicForm({
                 <FieldComponent
                   field={field}
                   value={values[field.name]}
+                  initial={initialValuesProp[field.name]}
                   dataSource={fieldData}
-                  onChange={(value) =>
-                    handleChange(field.name, value)
-                  }
+                  onChange={(value) => handleChange(field.name, value)}
                 />
               </div>
             )
@@ -123,14 +160,9 @@ function DynamicForm({
         </div>
 
         <div className="dynamic-form__footer">
-          <button
-            className="dynamic-form__submit"
-            type="submit"
-          >
+          <button className="dynamic-form__submit" type="submit">
             <span>{submitLabel}</span>
-            <span aria-hidden="true">
-              →
-            </span>
+            <span aria-hidden="true">→</span>
           </button>
         </div>
       </form>

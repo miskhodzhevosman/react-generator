@@ -3,18 +3,31 @@ import { NavLink } from 'react-router-dom'
 type MenuItem = {
   path: string
   label: string
-  icon: string
 }
 
 const menuItems: MenuItem[] = [
-  { path: '/nomenclature', label: 'nomenclature', icon: '🏠' },
-  { path: '/project', label: 'project', icon: '🏠' },
+  { path: '/counterparty', label: 'counterparty' },
+  { path: '/historicalcounterparty', label: 'historicalcounterparty' },
+  { path: '/historicalproject', label: 'historicalproject' },
+  { path: '/historicalprojectitem', label: 'historicalprojectitem' },
+  { path: '/historicalprojectstatus', label: 'historicalprojectstatus' },
+  { path: '/project', label: 'project' },
+  { path: '/projectfile', label: 'projectfile' },
+  { path: '/projectitem', label: 'projectitem' },
+  { path: '/projectstatus', label: 'projectstatus' },
+  { path: '/financeoperationtype', label: 'financeoperationtype' },
+  { path: '/financialtransaction', label: 'financialtransaction' },
+  { path: '/factoryfile', label: 'factoryfile' },
+  { path: '/location', label: 'location' },
+  { path: '/nomenclature', label: 'nomenclature' },
+  { path: '/nomenclaturefile', label: 'nomenclaturefile' },
+  { path: '/nomenclatureimage', label: 'nomenclatureimage' },
 ]
 
 function Sidebar() {
   return (
     <aside className="sidebar">
-      <div className="logo">MyApp</div>
+      <div className="logo">ERP APP</div>
       <nav>
         {menuItems.map((item) => (
           <NavLink
@@ -25,7 +38,6 @@ function Sidebar() {
               `nav-link ${isActive ? 'active' : ''}`
             }
           >
-            <span className="icon">{item.icon}</span>
             <span>{item.label}</span>
           </NavLink>
         ))}

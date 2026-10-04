@@ -3,8 +3,10 @@
 generate_crud.py — генерирует файлы для всех моделей указанных приложений
 по шаблонам, пути к которым заданы в path_list.py.
 
-Дополнительно: файлы схем (`schemas_path`) генерируются с нуля
-из полей модели (FormSchema + TableSchema), без чтения шаблона.
+Дополнительно:
+  * файлы схем (`schemas_path`) генерируются с нуля из полей модели
+    (FormSchema + TableSchema), без чтения шаблона;
+  * App.tsx и Sidebar.tsx генерируются с нуля по списку моделей.
 
 Запуск (из той же папки, где лежит generate_crud.py и path_list.py):
     python generate_crud.py
@@ -147,6 +149,9 @@ FIELD_TYPE_MAP = {
     # прочее
     "UUIDField": "text",
     "JSONField": "text",
+    "FileField": "file",
+"ImageField": "image",
+"BinaryField": "file",
 }
 
 RELATION_FIELDS = {"ForeignKey", "OneToOneField", "ManyToManyField"}
@@ -175,7 +180,6 @@ def get_placeholder(field, field_type: str) -> str:
     """placeholder для поля формы."""
     choices = getattr(field, "choices", None)
     if choices:
-        # первое value из choices
         try:
             first_value = next(iter(choices))[0]
         except StopIteration:
@@ -345,7 +349,151 @@ def write_schema(
 
 
 # ============================================================
-# 5. Точка входа
+# 5. Генерация App.tsx и Sidebar.tsx
+# ============================================================
+
+def collect_app_entities() -> list[tuple[str, str]]:
+    """
+    Возвращает список (app_label, entity) в порядке path_list.apps,
+    внутри приложения — модели отсортированы по имени.
+    """
+    from django.apps import apps
+
+    result: list[tuple[str, str]] = []
+    for app_label in [a.rstrip("/") for a in path_list.apps]:
+        try:
+            app_config = apps.get_app_config(app_label)
+        except LookupError:
+            continue
+        models = [m for m in app_config.get_models() if not m._meta.auto_created]
+        for model in sorted(models, key=lambda x: x.__name__):
+            result.append((app_label, model.__name__.lower()))
+    return result
+
+
+def _pascal_case(name: str) -> str:
+    """entity → Entity (PascalCase)."""
+    return "".join(part.capitalize() for part in name.split("_"))
+
+
+def render_app_tsx(entities: list[tuple[str, str]]) -> str:
+    """Генерирует содержимое App.tsx."""
+    lines = []
+    lines.append("import { Routes, Route } from 'react-router-dom'")
+    lines.append("import Sidebar from './components/Sidebar'")
+
+    for _, entity in entities:
+        component = _pascal_case(entity) + "Page"
+        lines.append(
+            f"import {component} from './modules/{entity}/{entity}MainView'"
+        )
+
+    lines.append("import './App.css'")
+    lines.append("")
+    lines.append("function App() {")
+    lines.append("  return (")
+    lines.append('    <div className="app">')
+    lines.append("      <Sidebar />")
+    lines.append('      <main className="content">')
+    lines.append("        <Routes>")
+    for _, entity in entities:
+        component = _pascal_case(entity) + "Page"
+        lines.append(
+            f'          <Route path="/{entity}" element={{<{component} />}} />'
+        )
+    lines.append("        </Routes>")
+    lines.append("      </main>")
+    lines.append("    </div>")
+    lines.append("  )")
+    lines.append("}")
+    lines.append("")
+    lines.append("export default App")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def render_sidebar_tsx(entities: list[tuple[str, str]]) -> str:
+    """Генерирует содержимое Sidebar.tsx."""
+    lines = []
+    lines.append("import { NavLink } from 'react-router-dom'")
+    lines.append("")
+    lines.append("type MenuItem = {")
+    lines.append("  path: string")
+    lines.append("  label: string")
+    lines.append("}")
+    lines.append("")
+    lines.append("const menuItems: MenuItem[] = [")
+    for _, entity in entities:
+        lines.append(f"  {{ path: '/{entity}', label: '{entity}' }},")
+    lines.append("]")
+    lines.append("")
+    lines.append("function Sidebar() {")
+    lines.append("  return (")
+    lines.append('    <aside className="sidebar">')
+    lines.append('      <div className="logo">ERP APP</div>')
+    lines.append("      <nav>")
+    lines.append("        {menuItems.map((item) => (")
+    lines.append("          <NavLink")
+    lines.append("            key={item.path}")
+    lines.append("            to={item.path}")
+    lines.append("            end={item.path === '/'}")
+    lines.append("            className={({ isActive }) =>")
+    lines.append("              `nav-link ${isActive ? 'active' : ''}`")
+    lines.append("            }")
+    lines.append("          >")
+    lines.append("            <span>{item.label}</span>")
+    lines.append("          </NavLink>")
+    lines.append("        ))}")
+    lines.append("      </nav>")
+    lines.append("    </aside>")
+    lines.append("  )")
+    lines.append("}")
+    lines.append("")
+    lines.append("export default Sidebar")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def write_app_tsx(entities, dry_run: bool = False) -> Path | None:
+    raw = (
+        getattr(path_list, "app_import_path", None)
+        or getattr(path_list, "app_path", None)
+    )
+    if not raw:
+        print("[!] app_import_path/app_path не задан — App.tsx пропущен")
+        return None
+    dest = resolve_path(raw)
+    content = render_app_tsx(entities)
+    if dry_run:
+        print(f"      [dry-run] App.tsx → {dest}")
+        return dest
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(content, encoding="utf-8")
+    print(f"      ✓ {dest}")
+    return dest
+
+
+def write_sidebar_tsx(entities, dry_run: bool = False) -> Path | None:
+    raw = (
+        getattr(path_list, "sidebar_path", None)
+        or getattr(path_list, "side_bare_path", None)
+    )
+    if not raw:
+        print("[!] sidebar_path не задан — Sidebar.tsx пропущен")
+        return None
+    dest = resolve_path(raw)
+    content = render_sidebar_tsx(entities)
+    if dry_run:
+        print(f"      [dry-run] Sidebar.tsx → {dest}")
+        return dest
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(content, encoding="utf-8")
+    print(f"      ✓ {dest}")
+    return dest
+
+
+# ============================================================
+# 6. Точка входа
 # ============================================================
 def resolve_path(raw: str) -> Path:
     p = Path(raw)
@@ -407,7 +555,7 @@ def main():
             continue
 
         print(f"📦 {app_label}  ({len(models)} моделей)")
-
+        
         for model in sorted(models, key=lambda x: x.__name__):
             ctx = build_context(model)
             print(f"  🧩 {model.__name__}  "
@@ -422,6 +570,14 @@ def main():
             if schemas_path:
                 write_schema(schemas_path, model)
         print()
+
+    # --- 6. App.tsx и Sidebar.tsx ---
+    entities = collect_app_entities()
+    print(f"[*] Сущностей для App/Sidebar: {len(entities)}")
+    print(f"    {[e for _, e in entities]}")
+    write_app_tsx(entities)
+    write_sidebar_tsx(entities)
+    print()
 
     print("Готово.")
 

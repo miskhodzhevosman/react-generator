@@ -7,7 +7,7 @@ export const nomenclatureimageFormSchema = [
   },
   {
     name: 'image',
-    type: 'text',
+    type: 'file',
     label: 'Изображение',
     placeholder: 'Введите Изображение',
   },
