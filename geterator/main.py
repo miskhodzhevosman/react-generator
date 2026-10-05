@@ -376,10 +376,17 @@ def _pascal_case(name: str) -> str:
     return "".join(part.capitalize() for part in name.split("_"))
 
 
+def _humanize(name: str) -> str:
+    """entity_name → Entity Name (для label в сайдбаре)."""
+    return " ".join(part.capitalize() for part in name.split("_"))
+
+
 def render_app_tsx(entities: list[tuple[str, str]]) -> str:
-    """Генерирует содержимое App.tsx."""
+    """Генерирует содержимое App.tsx с AppShell."""
     lines = []
     lines.append("import { Routes, Route } from 'react-router-dom'")
+    lines.append("import { AppShell } from '@mantine/core'")
+    lines.append("")
     lines.append("import Sidebar from './components/Sidebar'")
 
     for _, entity in entities:
@@ -388,13 +395,18 @@ def render_app_tsx(entities: list[tuple[str, str]]) -> str:
             f"import {component} from './modules/{entity}/{entity}MainView'"
         )
 
-    lines.append("import './App.css'")
     lines.append("")
     lines.append("function App() {")
     lines.append("  return (")
-    lines.append('    <div className="app">')
-    lines.append("      <Sidebar />")
-    lines.append('      <main className="content">')
+    lines.append("    <AppShell")
+    lines.append("      navbar={{ width: 260, breakpoint: 'sm' }}")
+    lines.append('      padding="md"')
+    lines.append("    >")
+    lines.append("      <AppShell.Navbar>")
+    lines.append("        <Sidebar />")
+    lines.append("      </AppShell.Navbar>")
+    lines.append("")
+    lines.append("      <AppShell.Main>")
     lines.append("        <Routes>")
     for _, entity in entities:
         component = _pascal_case(entity) + "Page"
@@ -402,8 +414,8 @@ def render_app_tsx(entities: list[tuple[str, str]]) -> str:
             f'          <Route path="/{entity}" element={{<{component} />}} />'
         )
     lines.append("        </Routes>")
-    lines.append("      </main>")
-    lines.append("    </div>")
+    lines.append("      </AppShell.Main>")
+    lines.append("    </AppShell>")
     lines.append("  )")
     lines.append("}")
     lines.append("")
@@ -413,9 +425,15 @@ def render_app_tsx(entities: list[tuple[str, str]]) -> str:
 
 
 def render_sidebar_tsx(entities: list[tuple[str, str]]) -> str:
-    """Генерирует содержимое Sidebar.tsx."""
+    """Генерирует содержимое Sidebar.tsx на Mantine."""
     lines = []
-    lines.append("import { NavLink } from 'react-router-dom'")
+    lines.append(
+        "import { NavLink as RouterNavLink, useLocation } from 'react-router-dom'"
+    )
+    lines.append(
+        "import { NavLink, Stack, Text, ScrollArea, Box, Group } from '@mantine/core'"
+    )
+    lines.append("import ColorSchemeToggle from './ColorSchemeToggle'")
     lines.append("")
     lines.append("type MenuItem = {")
     lines.append("  path: string")
@@ -424,28 +442,39 @@ def render_sidebar_tsx(entities: list[tuple[str, str]]) -> str:
     lines.append("")
     lines.append("const menuItems: MenuItem[] = [")
     for _, entity in entities:
-        lines.append(f"  {{ path: '/{entity}', label: '{entity}' }},")
+        label = _humanize(entity)
+        lines.append(f"  {{ path: '/{entity}', label: '{label}' }},")
     lines.append("]")
     lines.append("")
     lines.append("function Sidebar() {")
+    lines.append("  const { pathname } = useLocation()")
+    lines.append("")
     lines.append("  return (")
-    lines.append('    <aside className="sidebar">')
-    lines.append('      <div className="logo">ERP APP</div>')
-    lines.append("      <nav>")
-    lines.append("        {menuItems.map((item) => (")
-    lines.append("          <NavLink")
-    lines.append("            key={item.path}")
-    lines.append("            to={item.path}")
-    lines.append("            end={item.path === '/'}")
-    lines.append("            className={({ isActive }) =>")
-    lines.append("              `nav-link ${isActive ? 'active' : ''}`")
-    lines.append("            }")
-    lines.append("          >")
-    lines.append("            <span>{item.label}</span>")
-    lines.append("          </NavLink>")
-    lines.append("        ))}")
-    lines.append("      </nav>")
-    lines.append("    </aside>")
+    lines.append('    <Box p="md" h="100%">')
+    lines.append(
+        '      <Group justify="space-between" align="center" mb="lg">'
+    )
+    lines.append('        <Text size="xl" fw={700}>')
+    lines.append("          ERP APP")
+    lines.append("        </Text>")
+    lines.append("        <ColorSchemeToggle />")
+    lines.append("      </Group>")
+    lines.append("")
+    lines.append('      <ScrollArea h="calc(100% - 60px)">')
+    lines.append("        <Stack gap={4}>")
+    lines.append("          {menuItems.map((item) => (")
+    lines.append("            <NavLink")
+    lines.append("              key={item.path}")
+    lines.append("              component={RouterNavLink}")
+    lines.append("              to={item.path}")
+    lines.append("              label={item.label}")
+    lines.append("              active={pathname === item.path}")
+    lines.append('              variant="light"')
+    lines.append("            />")
+    lines.append("          ))}")
+    lines.append("        </Stack>")
+    lines.append("      </ScrollArea>")
+    lines.append("    </Box>")
     lines.append("  )")
     lines.append("}")
     lines.append("")
