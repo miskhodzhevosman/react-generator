@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Modal, Stack, Button, Text } from '@mantine/core'
 import DynamicTable from '../../../components/DynamicTable.jsx'
 import DynamicForm from '../../../components/DynamicForm.jsx'
 import Pagination from '../../../components/Pagination.jsx'
@@ -21,15 +22,22 @@ function EntityTable() {
 
   useEffect(() => { getAll() }, [getAll])
 
-  if (error) return <div>Ошибка: {error.message}</div>
+  if (error) return <Text c="red">Ошибка: {error.message}</Text>
 
   const handleDelete = async (row) => {
     if (!window.confirm(`Удалить запись #${row.id}?`)) return
     await remove(row.id)
   }
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (payload) => {
     if (!form) return
+
+    // Если DynamicForm отправил FormData (из-за файловых полей) —
+    // разворачиваем в объект перед отправкой в стор.
+    let values = payload
+    if (payload instanceof FormData) {
+      values = Object.fromEntries(payload.entries())
+    }
 
     if (form.mode === 'create') {
       await create(values)
@@ -42,64 +50,64 @@ function EntityTable() {
 
   const isOpen = Boolean(form)
   const isEdit = form?.mode === 'edit'
-  const formKey = isEdit ? form.row.id : 'create'
+  const formKey = isEdit ? `edit-${form.row.id}` : 'create'
 
   return (
-    <div className="project-table">
-      <div className="project-table__toolbar">
+    <>
+      <Stack gap="md">
         <SearchInput
           value={q}
           onChange={setQuery}
           placeholder="Поиск: название, артикул, фабрика"
         />
-      </div>
 
-      <DynamicTable
-        schema={projectTableSchema}
-        title='project'
-        data={items}
-        loading={loading}
-        onEdit={(row) => setForm({ mode: 'edit', row })}
-        onDelete={handleDelete}
-        onCreate={() => setForm({ mode: 'create' })}
-      />
+        <DynamicTable
+          schema={projectTableSchema}
+          title="project"
+          data={items}
+          loading={loading}
+          onEdit={(row) => setForm({ mode: 'edit', row })}
+          onDelete={handleDelete}
+          onCreate={() => setForm({ mode: 'create' })}
+        />
 
-      <Pagination
-        page={page}
-        pageSize={pageSize}
-        total={count}
-        onChange={setPage}
-      />
+        <Pagination
+          page={page}
+          pageSize={pageSize}
+          total={count}
+          onChange={setPage}
+        />
+      </Stack>
 
-      {isOpen && (
-        <div className="project-table__modal">
-          <div className="project-table__modal-backdrop" onClick={() => setForm(null)} />
-
-          <div className="project-table__modal-body">
+      <Modal
+        opened={isOpen}
+        onClose={() => setForm(null)}
+        title={isEdit ? 'Редактирование' : 'Создание'}
+        size="lg"
+        centered
+      >
+        {isOpen && (
+          <Stack gap="md">
             <DynamicForm
               key={formKey}
               schema={projectFormSchema}
               initialValues={isEdit ? form.row : {}}
-              title={isEdit ? 'Редактирование' : 'Создание'}
-              description={
-                isEdit
-                  ? 'Измените данные и сохраните.'
-                  : 'Заполните данные и создайте запись.'
-              }
+              title={null}
+              description={null}
+              submitLabel="Сохранить"
               onSubmit={handleSubmit}
             />
 
-            <button
-              type="button"
-              className="project-table__cancel"
+            <Button
+              variant="default"
               onClick={() => setForm(null)}
             >
               Отмена
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+            </Button>
+          </Stack>
+        )}
+      </Modal>
+    </>
   )
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Modal, Stack, Group, Button, Text } from '@mantine/core'
+import { Modal, Stack, Button, Text } from '@mantine/core'
 import DynamicTable from '../../../components/DynamicTable.jsx'
 import DynamicForm from '../../../components/DynamicForm.jsx'
 import Pagination from '../../../components/Pagination.jsx'
@@ -15,6 +15,9 @@ function EntityTable() {
     create, update, remove,
   } = nomenclatureStore()
 
+  // null — форма закрыта
+  // { mode: 'create' } — создание
+  // { mode: 'edit', row } — редактирование
   const [form, setForm] = useState(null)
 
   useEffect(() => { getAll() }, [getAll])
@@ -29,7 +32,8 @@ function EntityTable() {
   const handleSubmit = async (payload) => {
     if (!form) return
 
-    // Если пришёл FormData — разворачиваем в объект
+    // Если DynamicForm отправил FormData (из-за файловых полей) —
+    // разворачиваем в объект перед отправкой в стор.
     let values = payload
     if (payload instanceof FormData) {
       values = Object.fromEntries(payload.entries())
@@ -46,7 +50,7 @@ function EntityTable() {
 
   const isOpen = Boolean(form)
   const isEdit = form?.mode === 'edit'
-  const formKey = isEdit ? form.row.id : 'create'
+  const formKey = isEdit ? `edit-${form.row.id}` : 'create'
 
   return (
     <>

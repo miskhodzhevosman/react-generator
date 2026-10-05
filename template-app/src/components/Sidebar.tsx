@@ -9,21 +9,21 @@ type MenuItem = {
 
 const menuItems: MenuItem[] = [
   { path: '/counterparty', label: 'Counterparty' },
-  { path: '/historicalcounterparty', label: 'Historical Counterparty' },
-  { path: '/historicalproject', label: 'Historical Project' },
-  { path: '/historicalprojectitem', label: 'Historical Project Item' },
-  { path: '/historicalprojectstatus', label: 'Historical Project Status' },
+  { path: '/historicalcounterparty', label: 'Historicalcounterparty' },
+  { path: '/historicalproject', label: 'Historicalproject' },
+  { path: '/historicalprojectitem', label: 'Historicalprojectitem' },
+  { path: '/historicalprojectstatus', label: 'Historicalprojectstatus' },
   { path: '/project', label: 'Project' },
-  { path: '/projectfile', label: 'Project File' },
-  { path: '/projectitem', label: 'Project Item' },
-  { path: '/projectstatus', label: 'Project Status' },
-  { path: '/financeoperationtype', label: 'Finance Operation Type' },
-  { path: '/financialtransaction', label: 'Financial Transaction' },
-  { path: '/factoryfile', label: 'Factory File' },
+  { path: '/projectfile', label: 'Projectfile' },
+  { path: '/projectitem', label: 'Projectitem' },
+  { path: '/projectstatus', label: 'Projectstatus' },
+  { path: '/financeoperationtype', label: 'Financeoperationtype' },
+  { path: '/financialtransaction', label: 'Financialtransaction' },
+  { path: '/factoryfile', label: 'Factoryfile' },
   { path: '/location', label: 'Location' },
   { path: '/nomenclature', label: 'Nomenclature' },
-  { path: '/nomenclaturefile', label: 'Nomenclature File' },
-  { path: '/nomenclatureimage', label: 'Nomenclature Image' },
+  { path: '/nomenclaturefile', label: 'Nomenclaturefile' },
+  { path: '/nomenclatureimage', label: 'Nomenclatureimage' },
 ]
 
 function Sidebar() {
